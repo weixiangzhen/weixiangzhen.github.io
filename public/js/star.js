@@ -88,6 +88,7 @@
       this.stars = [];
       this.isRound = true;
 
+      this.hue = 230;
       this.timestamp = 0;
     }
 
@@ -110,6 +111,9 @@
       },
       setRound: function (isRound) {
         this.isRound = isRound;
+      },
+      setHue: function (hue) {
+        this.hue = hue;
       },
       setCanvas: function (cvs) {
         if (!cvs) throw Error('画布未定义或者不能为空！！！');
@@ -138,8 +142,8 @@
         // ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         // 背景色
         ctx.globalCompositeOperation = 'source-over';
-        ctx.globalAlpha = 0.5;
-        ctx.fillStyle = 'hsla(' + 230 + ', 64%, 6%, 2)';
+        ctx.globalAlpha = 0.4;
+        ctx.fillStyle = 'hsla(' + this.hue + ', 64%, 6%, 2)';
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
         // 画星星    
@@ -156,6 +160,8 @@
           gradient.addColorStop(0, '#fff');
           gradient.addColorStop(0.1, 'hsl(' + (10 + 2 * i) + ', 61%, 33%)');
           gradient.addColorStop(0.4, 'hsl(' + (100 + i) + ', 64%, 6%)');
+          // gradient.addColorStop(0.1, 'hsl(' + (160) + ', 61%, 33%)');
+          // gradient.addColorStop(0.4, 'hsl(' + (160) + ', 61%, 33%)');
           gradient.addColorStop(1, 'transparent');
           ctx.fillStyle = gradient;
 
