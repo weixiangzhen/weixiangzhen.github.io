@@ -4,11 +4,11 @@
   z.Chart = function (cvs) {
     this.ctx = cvs.getContext("2d");
     this.w = cvs.width;
-    this.h = cvs.height;     
-    cvs.width = this.w*4;
-    cvs.height = this.h*4;
+    this.h = cvs.height;
+    cvs.width = this.w * 4;
+    cvs.height = this.h * 4;
 
-    this.ctx.scale(4,4);
+    this.ctx.scale(4, 4);
 
     this.text = 'null';
     this.r = this.w < this.h ? this.w / 2 : this.h / 2;//先默认环半径为canvas宽度
@@ -19,16 +19,18 @@
     this.inR = 2 * this.r / 3 + this.inW / 2;//内环半径=内半径+内环宽度/2
     this.outR = 2 * this.r / 3 + this.inW + this.outW / 2;//外环半径=内半径+内环宽度+外环宽度/2
 
-    this.inColors = ['#74DE1C','#B2ED2E','#CBF76C'];
-    this.outColors = ['#8BEAF5','#0B72BD','#0A5DA0'];
+    this.inColors = ['#74DE1C', '#B2ED2E', '#CBF76C'];
+    this.outColors = ['#8BEAF5', '#0B72BD', '#0A5DA0'];
 
     this.curPercent = 0;
     this.defPercent = 100;
+
+    this.timerid = 0;
   }
 
   z.Chart.prototype = {
-    constructor: z.Chart, 
-    setColors:function (ins,outs) {
+    constructor: z.Chart,
+    setColors: function (ins, outs) {
       this.inColors = ins;
       this.outColors = outs;
     },
@@ -49,7 +51,7 @@
 
       //底色小
       this.ctx.beginPath();
-      var grd = this.ctx.createLinearGradient(this.w, 0, 0, this.h);    
+      var grd = this.ctx.createLinearGradient(this.w, 0, 0, this.h);
       grd.addColorStop(0, this.inColors[0]);
       grd.addColorStop(0.5, this.inColors[1]);
       grd.addColorStop(1, this.inColors[2]);
@@ -68,7 +70,7 @@
       var deg = 360 * this.curPercent / 100;
       // 动态外层     
       this.ctx.beginPath();
-      var grd = this.ctx.createLinearGradient(0, this.h, this.w, 0);      
+      var grd = this.ctx.createLinearGradient(0, this.h, this.w, 0);
       grd.addColorStop(0, this.outColors[0]);
       grd.addColorStop(0.5, this.outColors[1]);
       grd.addColorStop(1, this.outColors[2]);
@@ -98,15 +100,19 @@
       var text_w = this.ctx.measureText(this.text).width;
       this.ctx.fillText(this.text, this.w / 2 - text_w / 2, this.h / 2 + this.r / 5);
     },
-
     ratePie: function (perc) {
       if (perc < 0 || perc > 100) reutrn;
       this.defPercent = perc;
-
-      var timerid = setInterval(function () {
+    },
+    start: function () {
+      this.curPercent = 0;
+      if (this.timerid) {
+        clearInterval(this.timerid);
+      }
+      this.timerid = setInterval(function () {
         // 当count等于设定的百分比时，清除定时器
         if (this.curPercent == this.defPercent)
-          clearInterval(timerid);
+          clearInterval(this.timerid);
         else
           this.curPercent++;
         // 开始执行动画效果
