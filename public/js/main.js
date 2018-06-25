@@ -173,6 +173,8 @@ $(function ($) {
         }
       }
 
+      if(Math.abs(dy) > 50) return;
+
       if (dx >= 100) {
         (cur_index == 0 || !is_finish) || cur_index--;
         switchBio(cur_index)
