@@ -719,9 +719,9 @@ a, li {
 .bio-content .other .library,
 .bio-content .other .database {
   text-align: center;
-  width: 100%;
-  /* padding: 10px; */
+  width: 100%;  
 }
+
 
 .bio-content .other .library > div, 
 .bio-content .other .database > div {

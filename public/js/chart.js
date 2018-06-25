@@ -1,10 +1,15 @@
 ; (function () {
   "use strict";
 
-  z.Chart = function (cvs) {   
+  z.Chart = function (cvs) {
     this.ctx = cvs.getContext("2d");
     this.w = cvs.width;
-    this.h = cvs.height;   
+    this.h = cvs.height;     
+    cvs.width = this.w*4;
+    cvs.height = this.h*4;
+
+    this.ctx.scale(4,4);
+
     this.text = 'null';
     this.r = this.w < this.h ? this.w / 2 : this.h / 2;//先默认环半径为canvas宽度
     // var bgR = (this.r - this.r / 3) / 2;//内环背景半径

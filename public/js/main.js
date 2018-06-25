@@ -81,15 +81,23 @@ $(function ($) {
         var lw = $library.width(),
           dw = $database.width();
         $library.find('canvas').each(function (i) {
+          console.log(window.devicePixelRatio);
+          var fs = 0;
           if (lw > 700) {
             this.width = 150;
             this.height = 150;
-            $(this).css('padding', '0 1.5em');
+            fs = fontsize * 1.5;
           } else if (lw > 500) {
             this.width = 100;
-            this.height = 100;
-            $(this).css('padding', '0 1em');
+            this.height = 100;           
+            fs = fontsize;
           }
+          // $(this).css('padding', '0 1.5em');
+          $(this).css({
+            'padding': '0 ' + fs + 'px',
+            'width': this.width + fs * 2,
+            'height': this.height
+          });
           var c = new z.Chart(this);
           c.setColors(['#7fffd4', '#98f898', '#90ee90'], ['#87cefa', '#1e90ff', '#00bfff']);
           c.ratePie($(this).data('progress'));
@@ -97,11 +105,18 @@ $(function ($) {
         });
 
         $database.find('canvas').each(function (i) {
+          var fs = 0;
           if (dw > 500) {
             this.width = 150;
-            this.height = 150;
-            $(this).css('padding', '0 1.5em');
+            this.height = 150;            
+            fs = fontsize * 1.5;
           }
+          // $(this).css('padding', '0 1.5em');
+          $(this).css({
+            'padding': '0 ' + fs + 'px',
+            'width': this.width + fs * 2,
+            'height': this.height
+          });
           var c = new z.Chart(this);
           c.setColors(['#f0ffff', '#e0ffff', '#afeeee'], ['#32cd32', '#7fff00', '#7cfc00']);
           c.ratePie($(this).data('progress'));
