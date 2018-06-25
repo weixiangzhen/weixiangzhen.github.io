@@ -300,14 +300,13 @@
               <canvas width="90" height="90" data-progress="70">您的浏览器不支持Canvas，请升级...</canvas>
             </div>
           </div>
-          <p>SQLite：在编写软件测试工装上位机软件时使用过，主要用于保存串口数据。</p>
+          <p>SQLite：在开发软件测试工装上位机软件时使用过，主要用于保存串口数据。</p>
         </div>
       </div>
 
     </div>
 
     <div class="bio-content" data-content="4">
-
       <div class="design">
         <div class="message"></div>
         <div class="box" data-pos="0">
@@ -334,7 +333,8 @@
           <img src="/public/images/project_3.jpg">
           <div class="info">
             <p>名称：软件测试工装</p>
-            <p>源码：<a href="#" target="_blank">无</a>              
+            <p>源码：
+              <a href="#" target="_blank">无</a>
             </p>
             <p>描述：该项目是在公司保密区域开发，所以控制器程序和上位机软件截图暂无。</p>
           </div>
@@ -343,7 +343,8 @@
           <img src="/public/images/project_4.jpg">
           <div class="info">
             <p>名称：博客系统</p>
-            <p>源码：<a href="https://github.com/weixiangzhen/easyblog" target="_blank">点击查看</a>              
+            <p>源码：
+              <a href="https://github.com/weixiangzhen/easyblog" target="_blank">点击查看</a>
             </p>
             <p>描述：基于nodejs开发的一个简易版博客系统。</p>
           </div>
@@ -380,11 +381,17 @@
       }
     })(), z = z || {};
 
+    if (clientInfo == 'pc') {
+      $('.bio-content .message').html('<span>上下滑动切换图片</span>');
+    } else {
+      $('.bio-content .message').html('<span>点击图片进行切换</span>');
+    }
+
+    // 初始化canvas
     function initCanvas(ele) {
       if (!ele) return null;
 
       var winWidth = 0, winHeight = 0;
-
       //获取窗口宽度   
       if (window.innerWidth)
         winWidth = window.innerWidth;
@@ -401,11 +408,9 @@
       if (document.documentElement && document.documentElement.clientHeight && document.documentElement.clientWidth) {
         winHeight = document.documentElement.clientHeight;
         winWidth = document.documentElement.clientWidth;
-      }
-      /*var w = winWidth,
-        h = winHeight;
-      console.log(w, h);*/
+      }     
 
+      // 创建canvas
       var canvas = document.getElementById('canvas');
       if (!canvas) {
         canvas = document.createElement("canvas");
@@ -414,12 +419,12 @@
           ele.appendChild(textNode);
           return null;
         }
-        canvas.setAttribute('id', 'canvas');
+        canvas.setAttribute('id', 'canvas');// 设置id属性
         ele.appendChild(canvas);// 把画布添加到ele元素中
       }
-      var oldw = canvas.width, oldh = canvas.height, obj = {};
 
-      obj.canvas = canvas;
+      // 针对移动端的做一些判断
+      var oldw = canvas.width, oldh = canvas.height, obj = {};      
       if (clientInfo != 'pc' && oldh >= winHeight)
         obj.isResize = false;
       else {
@@ -429,9 +434,11 @@
         canvas.setAttribute('height', winHeight);
       }
 
+      obj.canvas = canvas;
       return obj;
     }
 
+    // 开始
     function startMove() {
       var ele = document.getElementById('background-container'),
         o = initCanvas(ele);
@@ -446,16 +453,17 @@
         return;
       }
 
+      // 动态创建script
       var head = document.getElementsByTagName('head')[0];
-
       script = document.createElement('script');
       script.type = 'text/javascript';
       script.src = '/public/js/star.js';
       script.id = 'star_js';
       script.onload = function () {
+        // 创建星空实例
         var c = z.Cosmos.getInstance();
         c.setCanvas(o.canvas);
-        if (clientInfo == 'mobile') {
+        if (clientInfo != 'pc') {
           c.setRound(false);
           c.setMaxStar(100);
           c.setHue(160);
@@ -464,7 +472,7 @@
       }
       head.appendChild(script);
     }
-
+    // 初始化一下
     startMove();
 
     var timerid = 0;
@@ -488,6 +496,7 @@
       console.log(data);
     });*/
 
+    // 获取天气
     function getWeather(data) {
       if (!data || data.errNo != '0') return;
       var content = data.data.weather.content;

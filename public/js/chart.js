@@ -14,26 +14,29 @@
     this.inR = 2 * this.r / 3 + this.inW / 2;//内环半径=内半径+内环宽度/2
     this.outR = 2 * this.r / 3 + this.inW + this.outW / 2;//外环半径=内半径+内环宽度+外环宽度/2
 
+    this.inColors = ['#74DE1C','#B2ED2E','#CBF76C'];
+    this.outColors = ['#8BEAF5','#0B72BD','#0A5DA0'];
+
     this.curPercent = 0;
     this.defPercent = 100;
   }
 
   z.Chart.prototype = {
-    constructor: z.Chart,
-    /*setText: function (str) {
-      this.text = str;
-    },*/
+    constructor: z.Chart, 
+    setColors:function (ins,outs) {
+      this.inColors = ins;
+      this.outColors = outs;
+    },
     animation: function () {
       // 清除画布
       this.ctx.clearRect(0, 0, this.w, this.h);
 
       // 大半径的底色，一块完整的圆形   
       this.ctx.beginPath();
-      var grd = this.ctx.createLinearGradient(0, this.h, this.w, 0);//颜色渐变的起始坐标和终点坐标
-      grd.addColorStop(0, "#74DE1C");
-      grd.addColorStop(0.3, "#9DDE12");
-      grd.addColorStop(0.6, "#B2ED2E");
-      grd.addColorStop(1, "#CBF76C");
+      var grd = this.ctx.createLinearGradient(0, this.h, this.w, 0);//颜色渐变的起始坐标和终点坐标      
+      grd.addColorStop(0, this.inColors[0]);
+      grd.addColorStop(0.5, this.inColors[1]);
+      grd.addColorStop(1, this.inColors[2]);
       this.ctx.strokeStyle = grd;//生成的颜色块赋值给样式        
       this.ctx.lineWidth = this.outW;
       this.ctx.arc(this.w / 2, this.h / 2, this.outR, 0, Math.PI * 2, !1);
@@ -41,11 +44,10 @@
 
       //底色小
       this.ctx.beginPath();
-      var grd = this.ctx.createLinearGradient(this.w, 0, 0, this.h);
-      grd.addColorStop(0, "#74DE1C");
-      grd.addColorStop(0.3, "#9DDE12");
-      grd.addColorStop(0.6, "#B2ED2E");
-      grd.addColorStop(1, "#CBF76C");
+      var grd = this.ctx.createLinearGradient(this.w, 0, 0, this.h);    
+      grd.addColorStop(0, this.inColors[0]);
+      grd.addColorStop(0.5, this.inColors[1]);
+      grd.addColorStop(1, this.inColors[2]);
       this.ctx.strokeStyle = grd;
       this.ctx.lineWidth = this.inW;
       this.ctx.arc(this.w / 2, this.h / 2, this.inR, 0, Math.PI * 2, !1);
@@ -59,13 +61,12 @@
 
       // 算出当前的角度
       var deg = 360 * this.curPercent / 100;
-      //外层     
+      // 动态外层     
       this.ctx.beginPath();
-      var grd = this.ctx.createLinearGradient(0, this.h, this.w, 0);
-      grd.addColorStop(0, "#8BEAF5");
-      grd.addColorStop(0.3, "#22A4D4");
-      grd.addColorStop(0.6, "#0B72BD");
-      grd.addColorStop(1, "#0A5DA0");
+      var grd = this.ctx.createLinearGradient(0, this.h, this.w, 0);      
+      grd.addColorStop(0, this.outColors[0]);
+      grd.addColorStop(0.5, this.outColors[1]);
+      grd.addColorStop(1, this.outColors[2]);
       this.ctx.strokeStyle = grd;
       this.ctx.lineWidth = this.outW;
       // 算出弧度
@@ -74,13 +75,12 @@
       this.ctx.arc(this.w / 2, this.h / 2, this.outR, 0 - 90 * Math.PI / 180, r - 90 * Math.PI / 180, !1);
       this.ctx.stroke();
 
-      //内层
+      // 动态内层
       this.ctx.beginPath();
       var grd = this.ctx.createLinearGradient(this.w, 0, 0, this.h);
-      grd.addColorStop(0, "#8BEAF5");
-      grd.addColorStop(0.3, "#22A4D4");
-      grd.addColorStop(0.6, "#0B72BD");
-      grd.addColorStop(1, "#0A5DA0");
+      grd.addColorStop(0, this.outColors[0]);
+      grd.addColorStop(0.5, this.outColors[1]);
+      grd.addColorStop(1, this.outColors[2]);
       this.ctx.strokeStyle = grd;
       this.ctx.lineWidth = this.inW;
       this.ctx.arc(this.w / 2, this.h / 2, this.inR, 0 - 90 * Math.PI / 180, r - 90 * Math.PI / 180, !1);

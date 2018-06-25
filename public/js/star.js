@@ -1,6 +1,7 @@
 (function () {
   "use strict";
 
+  // 常用的工具函数
   z.Common = new function () {
     this.rnd = function (min, max) {
       if (arguments.length < 2) {
@@ -126,20 +127,21 @@
         this.orbitX = this.size.width / 2;
         this.orbitY = this.size.height / 2;
       },
+      // 启动
       start: function () {
         this.init();
       },
+      // 重新启动
       restart: function () {
         this.stars = [];
         this.timestamp = 0;
         this.init();        
       },
+      // 设置星星的数量
       setMaxStar: function (max) {
         this.maxStar = max;
       },
-      draw: function (ctx) {
-        // 清空画布
-        // ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      draw: function (ctx) {       
         // 背景色
         ctx.globalCompositeOperation = 'source-over';
         ctx.globalAlpha = 0.4;
@@ -148,7 +150,7 @@
 
         // 画星星    
         ctx.globalCompositeOperation = 'lighter';
-
+        // 时间戳
         this.timestamp++;
         for (var i = 0, l = this.stars.length; i < l; i++) {
           var star = this.stars[i];
@@ -159,9 +161,7 @@
           var gradient = ctx.createRadialGradient(x, y, 0, x, y, star.getR());
           gradient.addColorStop(0, '#fff');
           gradient.addColorStop(0.1, 'hsl(' + (10 + 2 * i) + ', 61%, 33%)');
-          gradient.addColorStop(0.4, 'hsl(' + (100 + i) + ', 64%, 6%)');
-          // gradient.addColorStop(0.1, 'hsl(' + (160) + ', 61%, 33%)');
-          // gradient.addColorStop(0.4, 'hsl(' + (160) + ', 61%, 33%)');
+          gradient.addColorStop(0.4, 'hsl(' + (100 + i) + ', 64%, 6%)');       
           gradient.addColorStop(1, 'transparent');
           ctx.fillStyle = gradient;
 
@@ -178,11 +178,13 @@
               star.setAlpha(star.getAlpha() + 0.05);
             }
           } 
+          // 绘制
           ctx.globalAlpha = star.getAlpha();
           ctx.beginPath();
           ctx.arc(x, y, star.getR(), 0, 2 * Math.PI, !1);
           ctx.fill();
 
+          // 变化速度
           star.change();
         }
       },
@@ -196,7 +198,7 @@
     var instance = null;
 
     return {
-      getInstance: function () {//返回Singleton的实例
+      getInstance: function () {//返回Cosmos的实例
         if (!instance) instance = new Cosmos;
         return instance;
       }
@@ -235,7 +237,6 @@
   window.requestAnimationFrame(anim);
 
 })();
-
 
 /*Cosmos.prototype.anim = function () {
     // 兼容

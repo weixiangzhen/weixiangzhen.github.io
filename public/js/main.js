@@ -1,30 +1,50 @@
 // start
 $(function ($) {
+  var fontsize = parseInt($('body').css('font-size').slice(0, -2));
+
   //  简历的内容
   var $bio_contents = $('.bio-content'),
     $collapse = $('.main-navigation .collapse'),
     // 菜单栏
     $menu_lis = $('.main-navigation .menu li'),
+    // 个人能力  
+    $library = $('.bio-content .library'),
+    $database = $('.bio-content .database'),
+    // 实战项目
     $message = $('.bio-content .message'),
-    $library = $('.library'),
-    $database = $('.database');
+    $design = $('.bio-content .design'),
+    $designBoxs = $design.children('.box');
 
   var cur_index = 0, last_index = 0,
     is_finish = false,
-    is_message_finish = false,
     librarys = [],
     databases = [];
-
-  if (clientInfo === 'pc') {
-    $message.html('<span>上下滑动切换图片</span>');
-  } else {
-    $message.html('<span>点击图片进行切换</span>');
-  }
 
   //初始化简历内容 
   $($bio_contents[0]).fadeIn(1000, function () {
     is_finish = true;
   });
+
+  // 初始化实战项目，通过滑动切换
+  var unit = $($designBoxs[0]).innerHeight() + fontsize * 2, slide_dir = -1;
+  $design.css('height', unit * 3);
+
+  // 图片滑动函数
+  function slide(dir) {
+    var len = $designBoxs.length;
+
+    if (($($designBoxs[len - 1]).attr('data-pos') == '1' && dir == -1)
+      || ($($designBoxs[0]).attr('data-pos') == '1' && dir == 1)) {
+      return false;
+    }
+
+    $designBoxs.each(function () {
+      var $this = $(this), val = parseInt($this.attr('data-pos')) + dir;
+      $this.css('top', val * unit).attr('data-pos', val);
+    });
+    return true;
+  }
+  // slide(0);
 
   // 简历内容切换
   function switchBio(new_index) {
@@ -36,11 +56,17 @@ $(function ($) {
     var $cur_content = $bio_contents.eq(new_index);
     var $last_content = $bio_contents.eq(last_index);
 
-    if (!is_message_finish && $cur_content.data('content') == '4') {
-      is_message_finish = true;
-      $message.fadeIn(3000, function () {
-        $(this).fadeOut(1000);
+    if ($cur_content.data('content') == '4') {
+      // 信息提示     
+      $message.stop().fadeIn(3000, function () {
+        $(this).fadeOut(3000);
       });
+
+      //初始化图片
+      slide_dir = -1;
+      $designBoxs.each(function (i) {
+        $(this).css('top', (i * unit)).attr('data-pos', i);
+      })
     }
 
     $last_content.fadeOut(500, function () {
@@ -52,32 +78,32 @@ $(function ($) {
         librarys = [];
         databases = [];
 
-       var lw = $library.width(),
-        dw = $database.width();        
-
-        
+        var lw = $library.width(),
+          dw = $database.width();
         $library.find('canvas').each(function (i) {
-          if(lw > 700) {
+          if (lw > 700) {
             this.width = 150;
             this.height = 150;
-            $(this).css('padding','0 1.5em');
-          }else if(lw > 500) {
+            $(this).css('padding', '0 1.5em');
+          } else if (lw > 500) {
             this.width = 100;
             this.height = 100;
-            $(this).css('padding','0 1em');
+            $(this).css('padding', '0 1em');
           }
           var c = new z.Chart(this);
+          c.setColors(['#7fffd4', '#98f898', '#90ee90'], ['#87cefa', '#1e90ff', '#00bfff']);
           c.ratePie($(this).data('progress'));
           librarys.push(c);
         });
 
         $database.find('canvas').each(function (i) {
-          if(dw > 500) {
+          if (dw > 500) {
             this.width = 150;
             this.height = 150;
-            $(this).css('padding','0 1.5em');
+            $(this).css('padding', '0 1.5em');
           }
           var c = new z.Chart(this);
+          c.setColors(['#f0ffff', '#e0ffff', '#afeeee'], ['#32cd32', '#7fff00', '#7cfc00']);
           c.ratePie($(this).data('progress'));
           databases.push(c);
         });
@@ -91,33 +117,6 @@ $(function ($) {
     cur_index = $(this).index();
     switchBio(cur_index);
   });
-
-  // 实战项目，通过滑动切换
-  var $design = $('.bio-content .design'),
-    $designBoxs = $design.children('.box');
-
-  var unit = $($designBoxs[0]).innerHeight() + parseInt($('body').css('font-size').slice(0, -2)) * 2;
-  $design.css('height', unit * $designBoxs.length);
-
-  // 图片滑动函数
-  function slide(dir) {
-    var len = $designBoxs.length;
-
-    if (($($designBoxs[len - 1]).attr('data-pos') == '1' && dir == -1)
-      || ($($designBoxs[0]).attr('data-pos') == '1' && dir == 1)) {
-      return false;
-    }
-
-    for (var i = 0; i < len; i++) {
-      var $designBox = $($designBoxs[i]);
-      var val = parseInt($designBox.attr('data-pos')) + dir;
-      $designBox.css('top', (val * unit));
-      $designBox.attr('data-pos', val);
-    }
-    return true;
-  }
-
-  slide(0);
 
   // 判断是否点击，开始的坐标
   var isBegan = false, startX = 0, startY = 0, H = 0;
@@ -168,7 +167,6 @@ $(function ($) {
     }
   }
 
-  var slide_dir = -1;
   function _handlerEnd(parent, e) {
     if (typeof e.button != 'number' && isBegan && $(parent).data('content') == 4) {
       if (slide_dir == -1) {

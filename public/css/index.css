@@ -325,10 +325,9 @@ a, li {
   margin-left: 4px;
   margin-right: 4px;
   width: 18px;
-  height: 18px;  
-  /* background-color: white; */
+  height: 18px;   
   display: inline-block;
-  vertical-align: middle;
+  vertical-align: middle;  
 }
 
 /* 所有简介内容的开始 */
@@ -776,7 +775,8 @@ a, li {
   left: 0;
   width: 100%;
   text-align: center;  
-  color: #FD4275;
+  /* color: #FD4275; */
+  color: #dc143c;
   font-weight: bold;
 
   -moz-user-select: text;
